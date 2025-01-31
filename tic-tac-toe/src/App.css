@@ -1,0 +1,21 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.square {
+  border: 5px solid #999;
+  float: left;
+  font-size: 80px;
+  font-weight: bold;
+  line-height: 120px;
+  height: 120px;
+  padding: 0;
+  text-align: center;
+  width: 120px;
+}
+
+
+
