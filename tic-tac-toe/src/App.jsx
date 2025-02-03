@@ -71,8 +71,14 @@ function Board({xIsNext, squares, onPlay}) {
 function Game() {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
+  const [isAscending, setIsAscending] = useState(true);
   const currentSquares = history[currentMove];
   const xIsNext = currentMove % 2 === 0;
+  
+
+  function handleToggleOrder() {
+    setIsAscending(!isAscending);
+  };
 
   function handlePlay(nextSqeares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSqeares];
@@ -84,7 +90,8 @@ function Game() {
     setCurrentMove(nextMove);
   }
 
-  const moves = history.map((squares, move) => {
+  let moves = history.map((squares, move) => {
+
     let description;
     if(move > 0) {
       description = 'Go to move #' + move;
@@ -93,7 +100,7 @@ function Game() {
       description = 'Go to the start';
     }
 
-    if(move === (history.length - 1)) {
+    if(move === currentMove) {
       return (
         <li key={move}>
           <p>You are at move #{move+1}</p>
@@ -110,13 +117,16 @@ function Game() {
     
   });
 
+  const orderedMoves = isAscending ? moves : [...moves].reverse();
+
   return (
     <div className="game">
       <div className="game-board">
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
       <div className="game-info">
-        <ol>{moves}</ol>
+        <button className='asc-toggle' onClick={handleToggleOrder}>{isAscending ? "Toggle to descending order" : "Toggle to ascending order"}</button>
+        <ol>{orderedMoves}</ol>
       </div>
     </div>
 
