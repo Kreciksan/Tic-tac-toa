@@ -16,6 +16,11 @@
   width: 120px;
 }
 
+.square-highlighted {
+  border: 5px solid green;
+  color: green;
+}
+
 .board-row {
   width: 390px;
   margin: auto;

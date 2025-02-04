@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import './App.css'
 
-function Square({value, onSquareClick}) {
- 
+function Square({isHighlighted, value, onSquareClick}) {
+  
   return (
-    <div className='square' onClick={onSquareClick}>
+    <div className={'square ' + (isHighlighted ? 'square-highlighted': '') } onClick={onSquareClick}>
       {value}
     </div>
     );
@@ -12,8 +12,16 @@ function Square({value, onSquareClick}) {
 
 function Board({xIsNext, squares, onPlay}) {
 
+  
+  const winningLines = calculateWinner(squares);
+  let status;
+
+  if(winningLines[0]) status = "The winner is " + squares[winningLines[0]];
+  else status = 'The next player is "' + (xIsNext ? "X" : "O") + '"';
+
   function handleClick(i) {
-    if(squares[i] || calculateWinner(squares)) return;
+    
+    if(squares[i] || winningLines[0]) return;
 
     const nextSqeares = squares.slice();
     if(xIsNext) {
@@ -36,19 +44,13 @@ function Board({xIsNext, squares, onPlay}) {
 
     for(let i = 0; i < lines.length; i++) {
       const [a,b,c] = lines[i];
-
+      
       if(squares[a] && squares[a] === squares[b] && squares[b]  === squares[c]) {
-        return squares[a];
+        return lines[i];
       }
     }
-    return null;
+    return Array(3).fill(null);
   }
-
-  const winner = calculateWinner(squares);
-  let status;
-
-  if(winner) status = "The winner is " + winner;
-  else status = 'The next player is "' + (xIsNext ? "X" : "O") + '"';
 
   return (
     <>
@@ -56,9 +58,12 @@ function Board({xIsNext, squares, onPlay}) {
 
       {Array(3).fill(null).map((_, rowIndex) => (
         <div key={rowIndex} className="board-row">
-          {Array(3).fill(null).map((_,index) => (
-            <Square key={index + (rowIndex * 3)} value={squares[index + (rowIndex * 3)]} onSquareClick={() => handleClick(index + (rowIndex * 3))} />
-          ))}
+          {Array(3).fill(null).map((_,index) => {   
+            const key =  index + (rowIndex * 3);
+            return(
+              <Square key={key} isHighlighted={winningLines.includes(key)}  value={squares[key]} onSquareClick={() => handleClick(key)} />
+            )
+          })}
         </div>
       )
         
