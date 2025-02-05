@@ -15,8 +15,9 @@ function Board({xIsNext, squares, onPlay}) {
   
   const winningLines = calculateWinner(squares);
   let status;
-
+  
   if(winningLines[0]) status = "The winner is " + squares[winningLines[0]];
+  else if(!squares.includes(null)) status = "Draw"
   else status = 'The next player is "' + (xIsNext ? "X" : "O") + '"';
 
   function handleClick(i) {
@@ -108,7 +109,7 @@ function Game() {
     if(move === currentMove) {
       return (
         <li key={move}>
-          <p>You are at move #{move+1}</p>
+          <p>You are at {move == 0 ? 'the begining' : 'move #' + move}</p>
         </li>
       );
     }
