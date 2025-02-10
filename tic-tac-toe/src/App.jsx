@@ -16,13 +16,13 @@ function Board({xIsNext, squares, onPlay}) {
   const winningLines = calculateWinner(squares);
   let status;
   
-  if(winningLines[0]) status = "The winner is " + squares[winningLines[0]];
+  if(winningLines[0] != null) status = "The winner is " + squares[winningLines[0]];
   else if(!squares.includes(null)) status = "Draw"
   else status = 'The next player is "' + (xIsNext ? "X" : "O") + '"';
 
   function handleClick(i) {
     
-    if(squares[i] || winningLines[0]) return;
+    if(squares[i] || winningLines[0] != null) return;
 
     const nextSqeares = squares.slice();
     if(xIsNext) {
@@ -95,12 +95,23 @@ function Game() {
   function jumpTo(nextMove) {
     setCurrentMove(nextMove);
   }
-
+  let preSquares = [history[0].toString()];
+  
   let moves = history.map((squares, move) => {
 
+   
+    
+    
     let description;
     if(move > 0) {
       description = 'Go to move #' + move;
+      // preSquares = history[move -1]
+      // console.log(squares.toString());
+      // console.log(preSquares.toString());
+      // console.log("-------------");
+      
+      // console.log(squares.toString().replace(preSquares.toString(),' '));
+
     }
     else {
       description = 'Go to the start';
@@ -122,6 +133,8 @@ function Game() {
     }
     
   });
+
+
 
   const orderedMoves = isAscending ? moves : [...moves].reverse();
 
