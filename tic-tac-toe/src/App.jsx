@@ -31,7 +31,7 @@ function Board({xIsNext, squares, onPlay}) {
     else {
       nextSqeares[i] = 'O';
     }
-    onPlay(nextSqeares);
+    onPlay(nextSqeares, i);
 
   }
 
@@ -86,8 +86,8 @@ function Game() {
     setIsAscending(!isAscending);
   };
 
-  function handlePlay(nextSqeares) {
-    const nextHistory = [...history.slice(0, currentMove + 1), nextSqeares];
+  function handlePlay(nextSqeares, moveIndex) {
+    const nextHistory = [...history.slice(0, currentMove + 1), { squares: nextSqeares, moveIndex}];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length -1);
   }
@@ -99,19 +99,15 @@ function Game() {
   
   let moves = history.map((squares, move) => {
 
-   
-    
-    
     let description;
-    if(move > 0) {
-      description = 'Go to move #' + move;
-      // preSquares = history[move -1]
-      // console.log(squares.toString());
-      // console.log(preSquares.toString());
-      // console.log("-------------");
-      
-      // console.log(squares.toString().replace(preSquares.toString(),' '));
+    const row = Math.floor(squares.moveIndex/3);
+    const col = squares.moveIndex % 3;
 
+    if(move > 0) {
+      description = `Go to move #${move} (${row}, ${col})`
+      preSquares = history[move -1];
+
+      
     }
     else {
       description = 'Go to the start';
